@@ -1,8 +1,6 @@
 # Singleton
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/singleton`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+The Singleton module implements the Singleton pattern.
 
 ## Installation
 
@@ -22,7 +20,44 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To use Singleton, include the module in your class.
+
+```ruby
+class Klass
+   include Singleton
+   # ...
+end
+```
+
+This ensures that only one instance of Klass can be created.
+
+```ruby
+a,b  = Klass.instance, Klass.instance
+
+a == b
+# => true
+
+Klass.new
+# => NoMethodError - new is private ...
+```
+
+The instance is created at upon the first call of Klass.instance().
+
+```ruby
+class OtherKlass
+  include Singleton
+  # ...
+end
+
+ObjectSpace.each_object(OtherKlass){}
+# => 0
+
+OtherKlass.instance
+ObjectSpace.each_object(OtherKlass){}
+# => 1
+```
+
+This behavior is preserved under inheritance and cloning.
 
 ## Development
 
@@ -32,4 +67,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/hsbt/singleton.
+Bug reports and pull requests are welcome on GitHub at https://github.com/ruby/singleton.
