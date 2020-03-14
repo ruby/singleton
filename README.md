@@ -32,7 +32,7 @@ end
 This ensures that only one instance of Klass can be created.
 
 ```ruby
-a,b  = Klass.instance, Klass.instance
+a,b = Klass.instance, Klass.instance
 
 a == b
 # => true
