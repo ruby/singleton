@@ -203,31 +203,13 @@ if defined?(Ractor)
     module RactorLocalSingletonClassMethods # :nodoc:
       include Singleton::SingletonClassMethods
       def instance
-        set_mutex(Thread::Mutex.new) if Ractor.current[mutex_key].nil?
-        return Ractor.current[instance_key] if Ractor.current[instance_key]
-        Ractor.current[mutex_key].synchronize {
-          return Ractor.current[instance_key] if Ractor.current[instance_key]
-          set_instance(new())
-        }
-        Ractor.current[instance_key]
+        Ractor.store_if_absent(instance_key) { new }
       end
 
       private
 
       def instance_key
         :"__RactorLocalSingleton_instance_with_class_id_#{object_id}__"
-      end
-
-      def mutex_key
-        :"__RactorLocalSingleton_mutex_with_class_id_#{object_id}__"
-      end
-
-      def set_instance(val)
-        Ractor.current[instance_key] = val
-      end
-
-      def set_mutex(val)
-        Ractor.current[mutex_key] = val
       end
     end
 
